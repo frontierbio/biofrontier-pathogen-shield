@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { Shield, Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
+import logo from "@/assets/logo.jpeg";
 
 export default function Footer() {
   return (
@@ -9,7 +10,7 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <Shield className="h-7 w-7 text-secondary" />
+              <img src={logo} alt="BioFrontier logo" className="h-9 w-9 rounded-md object-contain" />
               <span className="text-lg font-extrabold">
                 Bio<span className="text-secondary">Frontier</span>
               </span>

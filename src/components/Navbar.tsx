@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Shield, Sun, Moon } from "lucide-react";
+import { Menu, X, Sun, Moon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import logo from "@/assets/logo.jpeg";
 
 const navLinks = [
   { to: "/", label: "Home" },
@@ -50,7 +51,7 @@ export default function Navbar() {
     >
       <div className="container mx-auto flex items-center justify-between py-4">
         <Link to="/" className="flex items-center gap-2">
-          <Shield className="h-8 w-8 text-secondary" />
+          <img src={logo} alt="BioFrontier logo" className="h-10 w-10 rounded-md object-contain" />
           <div>
             <span className="text-xl font-extrabold text-primary-foreground tracking-tight">
               Bio<span className="text-secondary">Frontier</span>
