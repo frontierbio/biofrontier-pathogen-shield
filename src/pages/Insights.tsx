@@ -2,15 +2,16 @@ import { useState } from "react";
 import { Search, Calendar, ArrowRight, ChevronDown, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import ScrollReveal from "../components/ScrollReveal";
+import SEOHead from "../components/SEOHead";
+import { articlesData } from "./Article";
 
-const articles = [
-  { title: "KZN Biosecurity Post-FMD: Lessons and Preparedness", cat: "Case Study", date: "Feb 2026", excerpt: "How KwaZulu-Natal farmers rebuilt biosecurity protocols after the 2024 FMD outbreak, and what every operation should have in place." },
-  { title: "Non-Toxic Disinfectants: Myth vs Reality", cat: "Research", date: "Jan 2026", excerpt: "Breaking down the science behind non-toxic disinfectant efficacy and why zero-chemical doesn't mean zero protection." },
-  { title: "Poultry Biosecurity Best Practices for SA Farmers", cat: "Guide", date: "Dec 2025", excerpt: "A comprehensive guide to implementing biosecurity measures in South African broiler and layer operations." },
-  { title: "Export Compliance: Is Your Farm Ready?", cat: "Compliance", date: "Nov 2025", excerpt: "Understanding the biosecurity requirements for South African agricultural exports to EU and Middle Eastern markets." },
-  { title: "Water Quality and Disease Prevention on Dairy Farms", cat: "Research", date: "Oct 2025", excerpt: "The critical link between water purification and disease control in dairy farming operations." },
-  { title: "Building a Biosecurity Culture: People, Process, Products", cat: "Opinion", date: "Sep 2025", excerpt: "Why biosecurity is about more than just products — and how to build compliance into your farm's DNA." },
-];
+const articles = articlesData.map(a => ({
+  slug: a.slug,
+  title: a.title,
+  cat: a.cat,
+  date: a.date,
+  excerpt: a.excerpt,
+}));
 
 const faqs = [
   { q: "What makes BioFrontier products non-toxic?", a: "Our formulations use biodegradable active ingredients that break down safely after disinfection. No chlorine, formaldehyde, or quaternary ammonium compounds." },
@@ -42,6 +43,12 @@ export default function InsightsPage() {
 
   return (
     <>
+      <SEOHead
+        type="insights"
+        title="Biosecurity Tips & Insights | BioFrontier"
+        description="Poultry biosecurity guidelines South Africa. Expert articles, case studies, and FAQs from BioFrontier."
+      />
+
       <section className="py-20 bg-hero">
         <div className="container mx-auto">
           <ScrollReveal>
@@ -73,7 +80,7 @@ export default function InsightsPage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filtered.map((a, i) => (
-              <ScrollReveal key={a.title} delay={i * 0.05}>
+              <ScrollReveal key={a.slug} delay={i * 0.05}>
                 <article className="rounded-lg bg-gradient-card shadow-bio p-6 h-full flex flex-col">
                   <div className="flex items-center gap-2 mb-3">
                     <span className="text-[10px] font-bold text-secondary uppercase tracking-wider">{a.cat}</span>
@@ -83,9 +90,12 @@ export default function InsightsPage() {
                   </div>
                   <h3 className="font-bold text-foreground mb-2 text-sm leading-snug">{a.title}</h3>
                   <p className="text-xs text-muted-foreground leading-relaxed flex-1">{a.excerpt}</p>
-                  <button className="mt-4 text-xs font-semibold text-secondary flex items-center gap-1 hover:gap-2 transition-all">
+                  <Link
+                    to={`/insights/${a.slug}`}
+                    className="mt-4 text-xs font-semibold text-secondary flex items-center gap-1 hover:gap-2 transition-all"
+                  >
                     Read More <ArrowRight className="h-3 w-3" />
-                  </button>
+                  </Link>
                 </article>
               </ScrollReveal>
             ))}
