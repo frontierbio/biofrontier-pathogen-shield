@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { MapPin, Mail, Phone, MessageCircle, ArrowRight } from "lucide-react";
+import { MapPin, Mail, Phone, MessageCircle, ArrowRight, Loader2 } from "lucide-react";
 import ScrollReveal from "../components/ScrollReveal";
 import { z } from "zod";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const contactSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100),
@@ -17,8 +19,9 @@ export default function ContactPage() {
   const [form, setForm] = useState<ContactForm>({ name: "", email: "", company: "", type: "", message: "" });
   const [errors, setErrors] = useState<Partial<Record<keyof ContactForm, string>>>({});
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const result = contactSchema.safeParse(form);
     if (!result.success) {
@@ -31,7 +34,25 @@ export default function ContactPage() {
       return;
     }
     setErrors({});
-    setSubmitted(true);
+    setLoading(true);
+
+    try {
+      const { error } = await supabase.from("contact_submissions").insert({
+        name: result.data.name,
+        email: result.data.email,
+        company: result.data.company || null,
+        operation_type: result.data.type,
+        message: result.data.message,
+      });
+
+      if (error) throw error;
+      setSubmitted(true);
+      toast.success("Enquiry submitted successfully!");
+    } catch {
+      toast.error("Something went wrong. Please try again or contact us directly.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const update = (field: keyof ContactForm, value: string) => {
@@ -74,45 +95,27 @@ export default function ContactPage() {
                     <div className="grid md:grid-cols-2 gap-4 mb-4">
                       <div>
                         <label className="text-xs font-semibold text-foreground block mb-1.5">Full Name *</label>
-                        <input
-                          type="text"
-                          value={form.name}
-                          onChange={e => update("name", e.target.value)}
-                          className="w-full p-3 rounded-md border border-border bg-background text-foreground text-sm"
-                          placeholder="Your name"
-                        />
+                        <input type="text" value={form.name} onChange={e => update("name", e.target.value)}
+                          className="w-full p-3 rounded-md border border-border bg-background text-foreground text-sm" placeholder="Your name" />
                         {errors.name && <p className="text-xs text-destructive mt-1">{errors.name}</p>}
                       </div>
                       <div>
                         <label className="text-xs font-semibold text-foreground block mb-1.5">Email *</label>
-                        <input
-                          type="email"
-                          value={form.email}
-                          onChange={e => update("email", e.target.value)}
-                          className="w-full p-3 rounded-md border border-border bg-background text-foreground text-sm"
-                          placeholder="you@company.co.za"
-                        />
+                        <input type="email" value={form.email} onChange={e => update("email", e.target.value)}
+                          className="w-full p-3 rounded-md border border-border bg-background text-foreground text-sm" placeholder="you@company.co.za" />
                         {errors.email && <p className="text-xs text-destructive mt-1">{errors.email}</p>}
                       </div>
                     </div>
                     <div className="grid md:grid-cols-2 gap-4 mb-4">
                       <div>
                         <label className="text-xs font-semibold text-foreground block mb-1.5">Company</label>
-                        <input
-                          type="text"
-                          value={form.company}
-                          onChange={e => update("company", e.target.value)}
-                          className="w-full p-3 rounded-md border border-border bg-background text-foreground text-sm"
-                          placeholder="Company name"
-                        />
+                        <input type="text" value={form.company} onChange={e => update("company", e.target.value)}
+                          className="w-full p-3 rounded-md border border-border bg-background text-foreground text-sm" placeholder="Company name" />
                       </div>
                       <div>
                         <label className="text-xs font-semibold text-foreground block mb-1.5">Operation Type *</label>
-                        <select
-                          value={form.type}
-                          onChange={e => update("type", e.target.value)}
-                          className="w-full p-3 rounded-md border border-border bg-background text-foreground text-sm"
-                        >
+                        <select value={form.type} onChange={e => update("type", e.target.value)}
+                          className="w-full p-3 rounded-md border border-border bg-background text-foreground text-sm">
                           <option value="">Select type...</option>
                           <option value="farm">Farm</option>
                           <option value="poultry">Poultry Operation</option>
@@ -126,20 +129,14 @@ export default function ContactPage() {
                     </div>
                     <div className="mb-6">
                       <label className="text-xs font-semibold text-foreground block mb-1.5">Message *</label>
-                      <textarea
-                        value={form.message}
-                        onChange={e => update("message", e.target.value)}
-                        rows={5}
+                      <textarea value={form.message} onChange={e => update("message", e.target.value)} rows={5}
                         className="w-full p-3 rounded-md border border-border bg-background text-foreground text-sm resize-none"
-                        placeholder="Tell us about your biosecurity needs..."
-                      />
+                        placeholder="Tell us about your biosecurity needs..." />
                       {errors.message && <p className="text-xs text-destructive mt-1">{errors.message}</p>}
                     </div>
-                    <button
-                      type="submit"
-                      className="w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-md bg-secondary text-secondary-foreground font-semibold hover:bg-bio-emerald-dark transition-colors"
-                    >
-                      Submit Enquiry <ArrowRight className="h-4 w-4" />
+                    <button type="submit" disabled={loading}
+                      className="w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-md bg-secondary text-secondary-foreground font-semibold hover:bg-bio-emerald-dark transition-colors disabled:opacity-60">
+                      {loading ? <><Loader2 className="h-4 w-4 animate-spin" /> Submitting...</> : <>Submit Enquiry <ArrowRight className="h-4 w-4" /></>}
                     </button>
                   </form>
                 )}
@@ -177,16 +174,11 @@ export default function ContactPage() {
                     </div>
                   </div>
 
-                  <a
-                    href="https://wa.me/27330000000"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 w-full px-6 py-3.5 rounded-md bg-secondary text-secondary-foreground font-semibold hover:bg-bio-emerald-dark transition-colors"
-                  >
+                  <a href="https://wa.me/27330000000" target="_blank" rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 w-full px-6 py-3.5 rounded-md bg-secondary text-secondary-foreground font-semibold hover:bg-bio-emerald-dark transition-colors">
                     <MessageCircle className="h-5 w-5" /> Chat on WhatsApp
                   </a>
 
-                  {/* Map placeholder */}
                   <div className="rounded-lg overflow-hidden shadow-bio">
                     <div className="aspect-[4/3] bg-muted flex items-center justify-center">
                       <div className="text-center">

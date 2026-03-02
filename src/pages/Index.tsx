@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Shield, ChevronRight, Droplets, Users, Award, Leaf, ArrowRight, CheckCircle2 } from "lucide-react";
 import { motion } from "framer-motion";
 import ScrollReveal from "../components/ScrollReveal";
+import SEOHead from "../components/SEOHead";
 import heroBg from "../assets/hero-bg.jpg";
 
 const stats = [
@@ -28,6 +29,7 @@ const benefits = [
 export default function HomePage() {
   return (
     <>
+      <SEOHead type="home" title="BioFrontier: Non-Toxic Biosecurity Solutions for Farms & Poultry in South Africa" description="Pioneering non-toxic, high-efficacy biosecurity solutions for South African farms, poultry, and food processing. Products, compliance support, and PPE from KwaZulu-Natal." />
       {/* Hero */}
       <section className="relative min-h-[90vh] flex items-center overflow-hidden">
         <div className="absolute inset-0">

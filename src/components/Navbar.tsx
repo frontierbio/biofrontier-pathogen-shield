@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Shield } from "lucide-react";
+import { Menu, X, Shield, Sun, Moon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
@@ -16,6 +16,7 @@ const navLinks = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [dark, setDark] = useState(() => document.documentElement.classList.contains("dark"));
   const location = useLocation();
 
   useEffect(() => {
@@ -25,6 +26,21 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => { setIsOpen(false); }, [location]);
+
+  const toggleDark = () => {
+    const next = !dark;
+    setDark(next);
+    document.documentElement.classList.toggle("dark", next);
+    localStorage.setItem("biofrontier-theme", next ? "dark" : "light");
+  };
+
+  useEffect(() => {
+    const saved = localStorage.getItem("biofrontier-theme");
+    if (saved === "dark") {
+      setDark(true);
+      document.documentElement.classList.add("dark");
+    }
+  }, []);
 
   return (
     <nav
@@ -60,22 +76,38 @@ export default function Navbar() {
               {label}
             </Link>
           ))}
+          <button
+            onClick={toggleDark}
+            className="p-2 text-primary-foreground/70 hover:text-secondary transition-colors"
+            aria-label="Toggle dark mode"
+          >
+            {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </button>
           <Link
             to="/contact"
-            className="ml-3 px-5 py-2 text-sm font-semibold rounded-md bg-secondary text-secondary-foreground hover:bg-bio-emerald-dark transition-colors"
+            className="ml-2 px-5 py-2 text-sm font-semibold rounded-md bg-secondary text-secondary-foreground hover:bg-bio-emerald-dark transition-colors"
           >
             Get Quote
           </Link>
         </div>
 
         {/* Mobile toggle */}
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="lg:hidden text-primary-foreground p-2"
-          aria-label="Toggle menu"
-        >
-          {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
+        <div className="flex items-center gap-2 lg:hidden">
+          <button
+            onClick={toggleDark}
+            className="text-primary-foreground/70 hover:text-secondary transition-colors p-2"
+            aria-label="Toggle dark mode"
+          >
+            {dark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          </button>
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="text-primary-foreground p-2"
+            aria-label="Toggle menu"
+          >
+            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu */}
