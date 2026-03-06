@@ -37,15 +37,22 @@ export default function ContactPage() {
     setLoading(true);
 
     try {
-      const { error } = await supabase.from("contact_submissions").insert({
+      const payload = {
         name: result.data.name,
         email: result.data.email,
         company: result.data.company || null,
         operation_type: result.data.type,
         message: result.data.message,
-      });
+      };
 
+      const { error } = await supabase.from("contact_submissions").insert(payload);
       if (error) throw error;
+
+      // Send email notification (fire-and-forget, don't block UX)
+      supabase.functions.invoke("notify-contact", { body: payload }).catch((err) =>
+        console.error("Email notification failed:", err)
+      );
+
       setSubmitted(true);
       toast.success("Enquiry submitted successfully!");
     } catch {
