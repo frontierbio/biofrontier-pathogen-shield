@@ -48,10 +48,7 @@ export default function ContactPage() {
       const { error } = await supabase.from("contact_submissions").insert(payload);
       if (error) throw error;
 
-      // Send email notification (fire-and-forget, don't block UX)
-      supabase.functions.invoke("notify-contact", { body: payload }).catch((err) =>
-        console.error("Email notification failed:", err)
-      );
+      // Email notification is triggered automatically via database webhook
 
       setSubmitted(true);
       toast.success("Enquiry submitted successfully!");
