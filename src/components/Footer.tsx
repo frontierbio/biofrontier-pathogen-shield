@@ -74,7 +74,7 @@ export default function Footer() {
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="h-4 w-4 text-secondary shrink-0" />
-                +27 (0) 33 000 0000
+                +27 62 704 7875
               </div>
             </div>
           </div>

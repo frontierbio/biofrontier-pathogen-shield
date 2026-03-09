@@ -172,7 +172,7 @@ export default function ContactPage() {
                         <Phone className="h-5 w-5 text-secondary shrink-0 mt-0.5" />
                         <div>
                           <p className="font-medium text-foreground">Phone</p>
-                          <p className="text-muted-foreground text-xs">+27 (0) 33 000 0000</p>
+                          <p className="text-muted-foreground text-xs">+27 62 704 7875</p>
                         </div>
                       </div>
                     </div>
