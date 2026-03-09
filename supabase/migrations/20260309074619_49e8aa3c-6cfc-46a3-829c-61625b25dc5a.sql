@@ -1,0 +1,1 @@
+CREATE POLICY "No public read access" ON public.contact_submissions FOR SELECT USING (false);
