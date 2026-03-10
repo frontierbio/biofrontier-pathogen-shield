@@ -7,6 +7,7 @@ import logo from "@/assets/logo-shield.png";
 const navLinks = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About" },
+  { to: "/services", label: "Services" },
   { to: "/solutions", label: "Solutions" },
   { to: "/products", label: "Products" },
   { to: "/insights", label: "Insights" },
