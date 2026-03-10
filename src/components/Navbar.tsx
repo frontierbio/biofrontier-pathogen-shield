@@ -57,7 +57,7 @@ export default function Navbar() {
               Bio<span className="text-secondary">Frontier</span>
             </span>
             <p className="text-[10px] text-primary-foreground/60 leading-none -mt-0.5">
-              Pioneering Resilient Pathogen Prevention
+              Biosecurity Risk Management
             </p>
           </div>
         </Link>
