@@ -8,6 +8,7 @@ import Layout from "./components/Layout";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Solutions from "./pages/Solutions";
+import Services from "./pages/Services";
 import Products from "./pages/Products";
 import Insights from "./pages/Insights";
 import Resources from "./pages/Resources";
