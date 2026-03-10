@@ -82,24 +82,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="py-16 bg-background">
-        <div className="container mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {stats.map((s, i) => (
-              <ScrollReveal key={s.label} delay={i * 0.1}>
-                <div className="text-center p-6 rounded-lg bg-gradient-card shadow-bio">
-                  <s.icon className="h-6 w-6 text-secondary mx-auto mb-3" />
-                  <div className="text-3xl md:text-4xl font-extrabold text-foreground mb-1">
-                    {s.value}
-                  </div>
-                  <p className="text-sm text-muted-foreground font-medium">{s.label}</p>
-                </div>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Why BioFrontier */}
       <section className="py-20 bg-muted">
