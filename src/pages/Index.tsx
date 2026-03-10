@@ -55,8 +55,8 @@ export default function HomePage() {
             </div>
 
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-primary-foreground leading-tight mb-6">
-              Biosecurity South Africa{" "}
-              <span className="text-secondary">Experts</span>
+              Biosecurity Risk{" "}
+              <span className="text-secondary">Management</span>
             </h1>
 
             <p className="text-lg md:text-xl text-primary-foreground/70 max-w-2xl mb-8 leading-relaxed">
